@@ -9,8 +9,8 @@ import Navbar from "./_components/navbar";
 import { SessionProvider } from "next-auth/react";
 
 export const metadata: Metadata = {
-  title: "Faculty | Incridea",
-  description: "Faculty portal for Incridea",
+  title: "Alumni | Incridea",
+  description: "Alumni portal for Incridea",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
@@ -20,7 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${GeistSans.variable}`}>
       <body>
-        <Toaster position="top-center"/>
+        <Toaster position="top-center" />
         <SessionProvider>
           <TRPCReactProvider>
             <Navbar />
@@ -33,4 +33,3 @@ export default function RootLayout({
     </html>
   );
 }
-    

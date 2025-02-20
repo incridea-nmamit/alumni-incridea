@@ -3,7 +3,7 @@
 import { useSession } from "next-auth/react";
 import PleaseLogin from "./_components/pleaseLogin";
 import Unauthorised from "./_components/unauthorised";
-import Faculty from "../components/faculty";
+import Alumni from "../components/alumni";
 import Admin from "../components/admin";
 import Volunteer from "~/components/volunteer";
 
@@ -17,10 +17,11 @@ export default function Home() {
         <Admin />
       ) : session.user.role === "VOLUNTEER" ? (
         <Volunteer />
-      ) : !session.user.email.endsWith("@nitte.edu.in") ? (
+      ) : session.user.email.endsWith("@nitte.edu.in") ||
+        session.user.email.endsWith("@nmamit.in") ? (
         <Unauthorised />
       ) : (
-        <Faculty />
+        <Alumni />
       )}
     </div>
   );

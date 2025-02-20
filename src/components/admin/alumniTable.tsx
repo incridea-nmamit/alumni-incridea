@@ -5,10 +5,10 @@ import React, { useState, type FunctionComponent } from "react";
 import { DataTable } from "~/components/ui/data-table";
 import PaginationControls from "~/components/utils/pagination/controls";
 
-import { FacultyColumns } from "./columns";
+import { AlumniColumns } from "./columns";
 import { api } from "~/trpc/react";
 
-const FacultyTable: FunctionComponent = () => {
+const AlumniTable: FunctionComponent = () => {
   const { data, fetchNextPage, isFetchingPreviousPage, isFetchingNextPage } =
     api.admin.getAllUsers.useInfiniteQuery(
       { take: 50 },
@@ -32,7 +32,7 @@ const FacultyTable: FunctionComponent = () => {
   return (
     <div className="container mx-auto py-10">
       <DataTable
-        columns={FacultyColumns}
+        columns={AlumniColumns}
         data={currPage ?? []}
         filterColumnId="id"
         filterPlaceHolder="Enter ID"
@@ -53,4 +53,4 @@ const FacultyTable: FunctionComponent = () => {
   );
 };
 
-export default FacultyTable;
+export default AlumniTable;

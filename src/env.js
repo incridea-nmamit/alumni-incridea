@@ -17,6 +17,8 @@ export const env = createEnv({
     CLOUDINARY_API_SECRET: z.string(),
     CAPTURE_INCRIDEA_URL: z.string(),
     CAPTURE_INCRIDEA_SECRET: z.string(),
+    RAZORPAY_KEY_ID: z.string(),
+    RAZORPAY_KEY_SECRET: z.string(),
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
@@ -31,6 +33,7 @@ export const env = createEnv({
     NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME: z.string(),
     NEXT_PUBLIC_CLOUDINARY_API_KEY: z.string(),
     NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET: z.string(),
+    NEXT_PUBLIC_RAZORPAY_KEY_ID: z.string(),
     // NEXT_PUBLIC_CLIENTVAR: z.string(),
   },
 
@@ -52,6 +55,9 @@ export const env = createEnv({
       process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
     NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET:
       process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET,
+    RAZORPAY_KEY_ID: process.env.RAZORPAY_KEY_ID,
+    RAZORPAY_KEY_SECRET: process.env.RAZORPAY_KEY_SECRET,
+    NEXT_PUBLIC_RAZORPAY_KEY_ID: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

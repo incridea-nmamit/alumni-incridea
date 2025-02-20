@@ -1,12 +1,10 @@
 import React from "react";
-import FacultyTable from "./facultyTable";
-import DependantTable from "./dependantTable";
+import AlumniTable from "./alumniTable";
 
 export default function Admin() {
   return (
     <div>
-      <FacultyTable />
-      <DependantTable />
+      <AlumniTable />
     </div>
   );
 }

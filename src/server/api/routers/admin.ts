@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { adminProcedure, createTRPCRouter } from "../trpc";
+import { env } from "~/env";
 
 export const adminRouter = createTRPCRouter({
   getAllUsers: adminProcedure
@@ -30,32 +31,47 @@ export const adminRouter = createTRPCRouter({
         nextCursor,
       };
     }),
-  getAllDependants: adminProcedure
+  toggleAlumniPass: adminProcedure
     .input(
       z.object({
-        cursor: z.number().nullish(),
-        take: z.number(),
+        id: z.number(),
+        state: z.boolean(),
       }),
     )
-    .query(async ({ input, ctx }) => {
-      const passes = await ctx.db.extraPass.findMany({
-        orderBy: {
-          id: "asc",
+    .mutation(async ({ input, ctx }) => {
+      const user = await ctx.db.user.update({
+        where: {
+          id: input.id,
         },
-        take: input.take + 1,
-        cursor: input.cursor ? { id: input.cursor } : undefined,
+        data: {
+          passClaimed: input.state,
+        },
       });
+      const response = await fetch(
+        `${env.CAPTURE_INCRIDEA_URL}/api/verifiedEmail`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${env.CAPTURE_INCRIDEA_SECRET}`,
+          },
+          body: JSON.stringify({
+            email: user.email,
+            name: user.name,
+            phoneNumber: user.phoneNumber,
+            specialType: "alumni",
+          }),
+        },
+      );
 
-      let nextCursor: typeof input.cursor | undefined = undefined;
-
-      if (passes.length > input.take) {
-        const nextPass = passes.pop();
-        nextCursor = nextPass?.id;
+      if (response.status === 200) {
+        await ctx.db.user.update({
+          where: {
+            email: ctx.session.user.email,
+          },
+          data: {
+            captureUpdated: true,
+          },
+        });
       }
-
-      return {
-        passes,
-        nextCursor,
-      };
     }),
 });

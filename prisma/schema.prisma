@@ -39,23 +39,42 @@ model Session {
 }
 
 model User {
-    id             Int         @id @default(autoincrement())
-    name           String?
-    email          String      @unique
-    phoneNumber    String?     // Add this line
-    emailVerified  DateTime?
-    image          String?
-    role           Role        @default(USER)
-    passClaimed    Boolean     @default(false)
-    attendedDay1   Boolean     @default(false)
-    attendedDay2   Boolean     @default(false)
-    captureUpdated Boolean     @default(false)
-    ExtraPass      ExtraPass[]
-    accounts       Account[]
-    sessions       Session[]
+    id               Int           @id @default(autoincrement())
+    name             String?
+    email            String        @unique
+    phoneNumber      String?
+    emailVerified    DateTime?
+    image            String?
+    idProof          String?
+    usn              String?
+    yearofGraduation Int?
+    role             Role          @default(USER)
+    passClaimed      Boolean       @default(false)
+    attendedDay1     Boolean       @default(false)
+    attendedDay2     Boolean       @default(false)
+    captureUpdated   Boolean       @default(false)
+    PaymentOrder     PaymentOrder? @relation(fields: [paymentOrderId], references: [id])
+    paymentOrderId   String?
+
+    accounts Account[]
+    sessions Session[]
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+}
+
+model PaymentOrder {
+    id           String  @id @default(cuid())
+    rzpOrderID   String  @unique
+    rzpPaymentID String? @unique
+    status       Status  @default(PENDING)
+    amount       Int
+
+    paymentData Json?
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    User      User[]
 }
 
 model VerificationToken {
@@ -66,31 +85,9 @@ model VerificationToken {
     @@unique([identifier, token])
 }
 
-model ExtraPass {
-    id           Int      @id @default(autoincrement())
-    name         String
-    relation     Relation
-    age          Int
-    idProof      String
-    attendedDay1 Boolean  @default(false)
-    attendedDay2 Boolean  @default(false)
-
-    DependantOn User @relation(fields: [userId], references: [id])
-    userId      Int
-
-    createdAt DateTime @default(now())
-}
-
 model ClientSettings {
     id  Int @id @default(autoincrement())
     day Day @default(DAY1)
-}
-
-enum Relation {
-    PARENT
-    CHILD
-    SIBLING
-    SPOUSE
 }
 
 enum Role {
@@ -102,4 +99,11 @@ enum Role {
 enum Day {
     DAY1
     DAY2
+}
+
+enum Status {
+    PENDING
+    SUCCESS
+    FAILED
+    REFUNDED
 }

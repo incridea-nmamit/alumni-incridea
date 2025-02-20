@@ -1,5 +1,5 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import { type ExtraPass, type Role } from "@prisma/client";
+import { type Role } from "@prisma/client";
 import { type DefaultSession, type NextAuthConfig } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { env } from "~/env";
@@ -56,7 +56,6 @@ export const authConfig = {
     session: async ({ session, user }) => {
       const dbUser = await db.user.findUnique({
         where: { email: user.email },
-        include: { ExtraPass: true },
       });
       return {
         ...session,
@@ -64,7 +63,6 @@ export const authConfig = {
           ...session.user,
           id: user.id,
           email: user.email,
-          // extraPasses: dbUser?.ExtraPass ?? [],
           role: dbUser?.role ?? "USER",
           passClaimed: dbUser?.passClaimed ?? false,
           attendedDay1: dbUser?.attendedDay1 ?? false,

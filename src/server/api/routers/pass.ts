@@ -1,14 +1,20 @@
 import { z } from "zod";
-import { createTRPCRouter, facultyProcedure } from "../trpc";
-import { Relation } from "@prisma/client";
-import { TRPCError } from "@trpc/server";
+import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { env } from "~/env";
+import Razorpay from "razorpay";
+import { TRPCError } from "@trpc/server";
+import { Status } from "@prisma/client";
 
 export const passRouter = createTRPCRouter({
-  claimFacultyPass: facultyProcedure
+  claimPass: protectedProcedure
     .input(
       z.object({
         phoneNumber: z.string().min(10).max(10).optional(),
+        idProof: z.string(),
+        usn: z.string(),
+        yearOfGraduation: z
+          .number()
+          .max(2023, { message: "Only an alumnus can claim this pass." }),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -17,85 +23,62 @@ export const passRouter = createTRPCRouter({
           email: ctx.session.user.email,
         },
         data: {
-          passClaimed: true,
           phoneNumber: input.phoneNumber,
+          idProof: input.idProof,
         },
       });
-      const phone = input.phoneNumber ?? "";
-      const response = await fetch(
-        `${env.CAPTURE_INCRIDEA_URL}/api/verifiedEmail`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${env.CAPTURE_INCRIDEA_SECRET}`,
-          },
-          body: JSON.stringify({
-            email: user.email,
-            name: user.name,
-            phoneNumber: phone,
-            specialType: "faculty",
-          }),
-        },
-      );
-
-      if (response.status === 200) {
-        await ctx.db.user.update({
-          where: {
-            email: ctx.session.user.email,
-          },
-          data: {
-            captureUpdated: true,
-          },
+      const razorpayClient = new Razorpay({
+        key_id: env.RAZORPAY_KEY_ID,
+        key_secret: env.RAZORPAY_KEY_SECRET,
+      });
+      const razorpayOrder = await razorpayClient.orders.create({
+        amount: 307 * 100,
+        currency: "INR",
+        receipt: user.email,
+        payment_capture: true,
+      });
+      if (!razorpayOrder.id) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to create Razorpay order",
         });
       }
-
-      return user;
+      return await ctx.db.paymentOrder.create({
+        data: {
+          amount: 307,
+          rzpOrderID: razorpayOrder.id,
+          User: {
+            connect: {
+              id: user.id,
+            },
+          },
+          status: "PENDING",
+        },
+        include: {
+          User: true,
+        },
+      });
     }),
 
-  claimExtraPass: facultyProcedure
+  changePaymentStatus: protectedProcedure
     .input(
       z.object({
-        name: z.string(),
-        relation: z.nativeEnum(Relation),
-        age: z.number(),
-        idProof: z.string(),
+        orderId: z.string(),
+        rzpPaymentID: z.string().optional(),
+        status: z.nativeEnum(Status),
+        response: z.unknown(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const extraPasses = await ctx.db.user.findUnique({
+      return await ctx.db.paymentOrder.update({
         where: {
-          email: ctx.session.user.email,
+          id: input.orderId,
         },
-        include: {
-          ExtraPass: true,
-        },
-      });
-      if (extraPasses?.ExtraPass.length === 2) {
-        throw new TRPCError({
-          code: "FORBIDDEN",
-          message: "You can only claim 2 extra passes",
-        });
-      }
-      return await ctx.db.extraPass.create({
         data: {
-          name: input.name,
-          relation: input.relation,
-          age: input.age,
-          idProof: input.idProof,
-          DependantOn: {
-            connect: {
-              email: ctx.session.user.email,
-            },
-          },
+          rzpPaymentID: input.rzpPaymentID ?? undefined,
+          status: input.status,
+          paymentData: input.response ?? {},
         },
       });
     }),
-
-  getExtraPasses: facultyProcedure.query(async ({ ctx }) => {
-    return await ctx.db.extraPass.findMany({
-      where: {
-        userId: ctx.session.user.id,
-      },
-    });
-  }),
 });

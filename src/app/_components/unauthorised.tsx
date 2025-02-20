@@ -22,11 +22,12 @@ export default function Unauthorised() {
       </CardHeader>
       <CardContent className="flex max-w-prose flex-col gap-3">
         <div>
-          Only faculties of Nitte Deemed to be University can access this site.
+          Existing students and other engineering students are requested to
+          register from <a href="incridea.in">incride.in</a>
         </div>
         <div>
-          If you think this is an error, verify that you are signed in with the
-          correct account.
+          {/* TODO: Add details */}
+          If you think this is an error, contact the developers
         </div>
         <div>
           You are currently signed in as{" "}

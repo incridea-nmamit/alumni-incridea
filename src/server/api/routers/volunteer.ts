@@ -4,9 +4,9 @@ import {
   protectedProcedure,
   volunteerProcedure,
 } from "../trpc";
-import { dependantID2Num, facultyID2Num } from "~/lib/utils";
 import { TRPCError } from "@trpc/server";
 import { Day } from "@prisma/client";
+import { alumniID2Num } from "~/lib/utils";
 
 export const volunteerRouter = createTRPCRouter({
   markAttended: volunteerProcedure
@@ -17,76 +17,29 @@ export const volunteerRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const type = input.passId.startsWith("F") ? "faculty" : "dependant";
-
-      if (type === "faculty") {
-        const facultyId = facultyID2Num(input.passId);
-        const faculty = await ctx.db.user.findUnique({
-          where: { id: facultyId },
+      if (input.day === "DAY1") {
+        await ctx.db.user.update({
+          where: {
+            id: alumniID2Num(input.passId),
+          },
+          data: {
+            attendedDay1: true,
+          },
         });
-        if (!faculty) {
-          throw new TRPCError({
-            code: "NOT_FOUND",
-            message: "Faculty not found",
-          });
-        }
-        if (input.day === "DAY1") {
-          if (faculty.attendedDay1) {
-            throw new TRPCError({
-              code: "BAD_REQUEST",
-              message: "Faculty already marked as attended for day 1",
-            });
-          }
-          await ctx.db.user.update({
-            where: { id: facultyId },
-            data: { attendedDay1: true },
-          });
-        } else if (input.day === "DAY2") {
-          if (faculty.attendedDay2) {
-            throw new TRPCError({
-              code: "BAD_REQUEST",
-              message: "Faculty already marked as attended for day 2",
-            });
-          }
-          await ctx.db.user.update({
-            where: { id: facultyId },
-            data: { attendedDay2: true },
-          });
-        }
+      } else if (input.day === "DAY2") {
+        await ctx.db.user.update({
+          where: {
+            id: alumniID2Num(input.passId),
+          },
+          data: {
+            attendedDay2: true,
+          },
+        });
       } else {
-        const extraPassId = dependantID2Num(input.passId);
-        const extraPass = await ctx.db.extraPass.findUnique({
-          where: { id: extraPassId },
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Invalid day",
         });
-        if (!extraPass) {
-          throw new TRPCError({
-            code: "NOT_FOUND",
-            message: "Dependant not found",
-          });
-        }
-        if (input.day === "DAY1") {
-          if (extraPass.attendedDay1) {
-            throw new TRPCError({
-              code: "BAD_REQUEST",
-              message: "Dependant already marked as attended for day 1",
-            });
-          }
-          await ctx.db.extraPass.update({
-            where: { id: extraPassId },
-            data: { attendedDay1: true },
-          });
-        } else if (input.day === "DAY2") {
-          if (extraPass.attendedDay2) {
-            throw new TRPCError({
-              code: "BAD_REQUEST",
-              message: "Dependant already marked as attended for day 2",
-            });
-          }
-          await ctx.db.extraPass.update({
-            where: { id: extraPassId },
-            data: { attendedDay2: true },
-          });
-        }
       }
     }),
 
