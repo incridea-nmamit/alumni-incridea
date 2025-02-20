@@ -102,7 +102,7 @@ export default function SelfPass({ onClaim }: SelfPassProps) {
     <>
       <Script src="https://checkout.razorpay.com/v1/checkout.js" />
       <div className="flex items-center justify-center py-24">
-        <Card className="mx-4 w-full max-w-md border border-none bg-palate_3 text-white">
+        <Card className="mx-4 w-full max-w-md border border-none bg-blue-700/10 backdrop-blur-md shadow-2xl shadow-black/20 text-white">
           <CardHeader>
             <CardTitle className="text-center text-2xl">
               Claim Your Pass
@@ -163,28 +163,29 @@ export default function SelfPass({ onClaim }: SelfPassProps) {
                 uploadPreset={env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET}
                 onSuccess={(res) => {
                   if (res.info) {
-                    setDetails({
-                      ...details,
+                    setDetails((prevDetails) => ({
+                      ...prevDetails,
                       //@ts-expect-error It is what it is
                       idProof: res.info.secure_url as string,
-                    });
+                    }));
+                    setError("");
                   }
                 }}
                 options={{
                   resourceType: "image",
                 }}
-                className="rounded-lg bg-red-800 px-4 py-2 text-white"
+                className="rounded-lg bg-blue-800 px-4 py-2 text-white"
               >
                 Upload Graduation Certificate
               </CldUploadButton>
             )}
-            {error && <p className="text-red-400">{error}</p>}
+            {error && <p className="text-blue-400">{error}</p>}
             <Button
               onClick={async () => {
                 await claimPass();
               }}
               disabled={isSubmitting}
-              className="bg-white text-red-800 hover:bg-white hover:text-red-800"
+              className="bg-white text-blue-800 hover:bg-white hover:text-blue-800"
             >
               {isSubmitting ? "Claiming..." : "Claim My Pass"}
             </Button>

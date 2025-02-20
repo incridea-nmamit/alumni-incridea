@@ -16,7 +16,7 @@ export default function Alumni() {
   const day = api.volunteer.getDay.useQuery().data;
 
   const attended = " text-green-500 bg-white";
-  const notAttended = "text-red-500 bg-white";
+  const notAttended = "text-blue-500 bg-white";
 
   if (!claimed) {
     return <SelfPass onClaim={setClaimed} />;
@@ -65,17 +65,17 @@ export default function Alumni() {
             </div>
           </div>
         ) : (
-          <div className="rounded-lg bg-red-800 p-6 text-white">
+          <div className="rounded-lg bg-blue-800 p-6 text-white">
             You{"'"}ll be able to see your pass once our team has verified your
             documents! Please check back in 24 hours
           </div>
         )}
 
         <div className="fixed bottom-0 flex w-full flex-col items-center justify-center gap-4 rounded-t-xl">
-          <div className="flex w-full flex-col items-center justify-center gap-4 rounded-t-2xl bg-palate_3 p-4 text-palate_2 md:flex-row">
-            <p className="text-center text-white">
-              If you have any issues with payments or anything, WhatsApp -
-              0000000000
+          <div className="flex w-full flex-col items-center justify-center gap-4 rounded-t-2xl bg-blue-800 p-4 md:flex-row">
+            <p className="text-center text-sm text-white">
+              If you have any issues with payments or anything, WhatsApp
+              +91 96863 56123, +91 94488 46524
               {/* TODO: Add the correct number */}
             </p>
           </div>
