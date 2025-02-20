@@ -27,12 +27,14 @@ export default function Alumni() {
       <div className="flex flex-wrap justify-center gap-6">
         {session?.user.passClaimed ? (
           <div className="relative">
-            <Image
-              src={day?.day === "DAY2" ? "/pass2.png" : "/pass1.png"}
-              alt="Pass"
-              width={300}
-              height={600}
-            />
+            <div className="drop-shadow-[0_0_15px_rgba(0,0,0,0.7)]">
+              <Image
+                src={day?.day === "DAY2" ? "/pass2.png" : "/pass1.png"}
+                alt="Pass"
+                width={300}
+                height={600}
+              />
+            </div>
             <div className="absolute inset-0 flex flex-col">
               <div className="absolute right-10 mt-[9.8rem] flex w-fit flex-col text-center font-bold text-white">
                 <span>{alumniID}</span>
