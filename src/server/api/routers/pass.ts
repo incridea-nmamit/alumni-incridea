@@ -25,6 +25,7 @@ export const passRouter = createTRPCRouter({
         data: {
           phoneNumber: input.phoneNumber,
           idProof: input.idProof,
+          usn: input.usn,
         },
       });
       const razorpayClient = new Razorpay({
