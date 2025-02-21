@@ -45,7 +45,7 @@ export const passRouter = createTRPCRouter({
         });
       }
       return await ctx.db.paymentOrder.create({
-        data: {
+        data: { 
           amount: 307,
           rzpOrderID: razorpayOrder.id,
           User: {
