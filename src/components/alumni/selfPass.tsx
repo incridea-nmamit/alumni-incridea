@@ -26,7 +26,7 @@ export default function SelfPass({ onClaim }: SelfPassProps) {
     phoneNumber: "",
     idProof: "",
     usn: "",
-    yearOfGraduation: 2023,
+    yearOfGraduation: 2024,
   });
 
   const [error, setError] = useState("");
