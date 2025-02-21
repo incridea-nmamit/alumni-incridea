@@ -5,7 +5,7 @@ import Razorpay from "razorpay";
 import { TRPCError } from "@trpc/server";
 import { Status } from "@prisma/client";
 
-const ALUMNI_REGISTRATION_AMOUNT_IN_INR = 250
+const ALUMNI_REGISTRATION_AMOUNT_IN_INR = 256
 
 export const passRouter = createTRPCRouter({
   claimPass: protectedProcedure
