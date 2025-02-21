@@ -16,7 +16,7 @@ export const passRouter = createTRPCRouter({
         usn: z.string(),
         yearOfGraduation: z
           .number()
-          .max(2023, { message: "Only an alumnus can claim this pass." }),
+          .max(2024, { message: "Only an alumnus can claim this pass." }),
       }),
     )
     .mutation(async ({ ctx, input }) => {
