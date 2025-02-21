@@ -5,6 +5,8 @@ import Razorpay from "razorpay";
 import { TRPCError } from "@trpc/server";
 import { Status } from "@prisma/client";
 
+const ALUMNI_REGISTRATION_AMOUNT_IN_INR = 256
+
 export const passRouter = createTRPCRouter({
   claimPass: protectedProcedure
     .input(
@@ -14,7 +16,7 @@ export const passRouter = createTRPCRouter({
         usn: z.string(),
         yearOfGraduation: z
           .number()
-          .max(2023, { message: "Only an alumnus can claim this pass." }),
+          .max(2024, { message: "Only an alumnus can claim this pass." }),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -33,7 +35,7 @@ export const passRouter = createTRPCRouter({
         key_secret: env.RAZORPAY_KEY_SECRET,
       });
       const razorpayOrder = await razorpayClient.orders.create({
-        amount: 307 * 100,
+        amount: ALUMNI_REGISTRATION_AMOUNT_IN_INR * 100,
         currency: "INR",
         receipt: user.email,
         payment_capture: true,
@@ -45,8 +47,8 @@ export const passRouter = createTRPCRouter({
         });
       }
       return await ctx.db.paymentOrder.create({
-        data: { 
-          amount: 307,
+        data: {
+          amount: ALUMNI_REGISTRATION_AMOUNT_IN_INR,
           rzpOrderID: razorpayOrder.id,
           User: {
             connect: {

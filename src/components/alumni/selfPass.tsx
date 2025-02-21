@@ -26,7 +26,7 @@ export default function SelfPass({ onClaim }: SelfPassProps) {
     phoneNumber: "",
     idProof: "",
     usn: "",
-    yearOfGraduation: 2023,
+    yearOfGraduation: 2024,
   });
 
   const [error, setError] = useState("");
@@ -65,7 +65,7 @@ export default function SelfPass({ onClaim }: SelfPassProps) {
     const paymentObject = new (window as any).Razorpay({
       key: env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
       order_id: payment.rzpOrderID,
-      amount: 30700,
+      amount: 25600,
       currency: "INR",
       name: "Alumni Incridea",
       description: "Alumni Pass",
