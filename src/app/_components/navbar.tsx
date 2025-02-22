@@ -64,7 +64,7 @@ const Navbar = () => {
 
         {/* Mobile Sliding Menu */}
         <div className={`
-          fixed top-0 right-0 h-full w-64 bg-red-800 transform transition-transform duration-300 ease-in-out
+          fixed top-0 right-0 h-full w-64 bg-blue-800 transform transition-transform duration-300 ease-in-out
           ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}
           lg:hidden
         `}>
@@ -89,14 +89,14 @@ const Navbar = () => {
               <div className="mt-4">
                 {session ? (
                   <button
-                    className={`w-full rounded-3xl bg-white px-3 py-2 font-semibold text-red-700`}
+                    className={`w-full rounded-3xl bg-white px-3 py-2 font-semibold text-blue-700`}
                     onClick={() => signOut()}
                   >
                     Sign Out
                   </button>
                 ) : (
                   <button
-                    className={`w-full rounded-3xl bg-white px-3 py-2 font-semibold text-red-700`}
+                    className={`w-full rounded-3xl bg-white px-3 py-2 font-semibold text-blue-700`}
                     onClick={() => signIn("google")}
                   >
                     Sign In

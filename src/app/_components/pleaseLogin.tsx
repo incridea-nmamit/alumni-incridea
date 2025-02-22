@@ -10,7 +10,7 @@ export default function PleaseLogin() {
           Book your passes before coming to Incridea {"'"}25
         </p>
         <button
-        className={`rounded-3xl bg-white px-3 py-2 my-6 font-semibold text-red-700`}
+        className={`rounded-3xl bg-white px-3 py-2 my-6 font-semibold text-blue-700`}
         onClick={() => signIn("google")}
       >
         Sign In
