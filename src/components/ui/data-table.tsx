@@ -202,7 +202,7 @@ export function DataTable<TData, TValue>({
         </div>
       </div>
 
-      <div className="mx-auto rounded-md border bg-palate_3 text-white shadow-md">
+      <div className="mx-auto rounded-md border bg-blue-900 text-white shadow-md">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

@@ -15,6 +15,14 @@ export const adminRouter = createTRPCRouter({
         orderBy: {
           id: "asc",
         },
+        where: {
+          paymentOrderId: {
+            not: null,
+          },
+          PaymentOrder: {
+            status: "SUCCESS",
+          },
+        },
         take: input.take + 1,
         cursor: input.cursor ? { id: input.cursor } : undefined,
       });

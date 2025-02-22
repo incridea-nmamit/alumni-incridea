@@ -94,6 +94,7 @@ enum Role {
     ADMIN
     USER
     VOLUNTEER
+    VERIFIER
 }
 
 enum Day {

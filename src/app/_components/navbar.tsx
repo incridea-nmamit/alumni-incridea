@@ -10,9 +10,9 @@ const Navbar = () => {
 
   return (
     <nav
-      className={`fixed z-50 mx-2 lg:mx-[5%] mt-[16px] grid w-[calc(100%-16px)] lg:w-[90%] rounded-3xl bg-blue-800 py-4 shadow-2xl lg:backdrop-blur-xl`}
+      className={`fixed z-[1000] mx-2 lg:mx-[5%] mt-[16px] w-[calc(100%-16px)] max-w-full lg:w-[90%] rounded-3xl bg-blue-800 py-4 shadow-2xl lg:backdrop-blur-xl`}
     >
-      <div className="container relative mx-auto px-4 lg:text-sm">
+      <div className="container relative mx-auto px-4 lg:text-sm max-w-full">
         <div className="flex items-center justify-between px-4 lg:px-16">
           <div className="flex items-center">
             <Image
@@ -64,7 +64,7 @@ const Navbar = () => {
 
         {/* Mobile Sliding Menu */}
         <div className={`
-          fixed top-0 right-0 h-full w-64 bg-blue-800 transform transition-transform duration-300 ease-in-out
+          fixed top-0 right-0 h-full w-64 bg-blue-800 transform transition-transform duration-300 ease-in-out z-[1001] overflow-y-auto
           ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}
           lg:hidden
         `}>
