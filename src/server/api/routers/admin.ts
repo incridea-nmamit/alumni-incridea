@@ -15,6 +15,35 @@ export const adminRouter = createTRPCRouter({
         orderBy: {
           id: "asc",
         },
+        take: input.take + 1,
+        cursor: input.cursor ? { id: input.cursor } : undefined,
+      });
+
+      let nextCursor: typeof input.cursor | undefined = undefined;
+
+      if (users.length > input.take) {
+        const nextUser = users.pop();
+        nextCursor = nextUser?.id;
+      }
+
+      return {
+        users,
+        nextCursor,
+      };
+    }),
+
+    getAllUsersFiltered: adminProcedure
+    .input(
+      z.object({
+        cursor: z.number().nullish(),
+        take: z.number(),
+      }),
+    )
+    .query(async ({ input, ctx }) => {
+      const users = await ctx.db.user.findMany({
+        orderBy: {
+          id: "asc",
+        },
         where: {
           paymentOrderId: {
             not: null,
