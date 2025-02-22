@@ -2,6 +2,7 @@ import { z } from "zod";
 import { adminProcedure, createTRPCRouter } from "../trpc";
 import { env } from "~/env";
 
+
 export const adminRouter = createTRPCRouter({
   getAllUsers: adminProcedure
     .input(
@@ -20,7 +21,6 @@ export const adminRouter = createTRPCRouter({
       });
 
       let nextCursor: typeof input.cursor | undefined = undefined;
-
       if (users.length > input.take) {
         const nextUser = users.pop();
         nextCursor = nextUser?.id;
@@ -110,5 +110,25 @@ export const adminRouter = createTRPCRouter({
           },
         });
       }
+    }),
+
+  updateUserRole: adminProcedure
+    .input(z.object({
+      userId: z.number(),
+      newRole: z.enum(['ADMIN', 'USER', 'VOLUNTEER', 'VERIFIER']),
+    }))
+    .mutation(async ({ ctx, input }) => {
+      const currentUser = await ctx.db.user.findFirst({
+        where: { id: ctx.session.user.id }
+      });
+
+      if (currentUser?.role !== 'ADMIN') {
+        throw new Error('Unauthorized');
+      }
+
+      return ctx.db.user.update({
+        where: { id: input.userId },
+        data: { role: input.newRole }
+      });
     }),
 });

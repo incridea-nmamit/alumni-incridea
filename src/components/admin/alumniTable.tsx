@@ -34,8 +34,8 @@ const AlumniTable: FunctionComponent = () => {
       <DataTable
         columns={AlumniColumns}
         data={currPage ?? []}
-        filterColumnId="id"
-        filterPlaceHolder="Enter ID"
+        filterColumnId="email"
+        filterPlaceHolder="Search by email"
         manualPagination
         paginationChild={
           <PaginationControls
