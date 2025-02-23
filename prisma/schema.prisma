@@ -48,6 +48,7 @@ model User {
     idProof          String?
     usn              String?
     yearofGraduation Int?
+    userVerfied      Boolean       @default(false)
     role             Role          @default(USER)
     passClaimed      Boolean       @default(false)
     attendedDay1     Boolean       @default(false)
