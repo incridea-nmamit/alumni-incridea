@@ -34,13 +34,13 @@ const Unauthorised = () => {
             Satwik Prabhu
           </span>
           <a href="tel:9513295282" className="col-span-1 md:col-span-3 hover:underline hover:text-blue-500">
-            +919513295282
+            +91 95132 95282
           </a>
           <span>
             Omkar Prabhu
           </span>
           <a href="tel:9448846524" className="col-span-1 md:col-span-3 hover:underline hover:text-blue-500">
-            +919448846524
+            +91 94488 46524
           </a>
         </div>
         <div>

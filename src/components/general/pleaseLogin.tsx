@@ -3,7 +3,7 @@ import React from "react";
 
 const PleaseLogin = () => {
   return (
-    <div className="flex min-h-screen items-center justify-center">
+    <div className="flex h-full items-center justify-center">
       <div className="mx-4 w-full max-w-md rounded-2xl  bg-blue-900 p-10 text-center text-white shadow-lg">
         <h1 className="mb-4 text-2xl font-bold">Alumni Registrations for Incridea</h1>
         <p className="text-base">

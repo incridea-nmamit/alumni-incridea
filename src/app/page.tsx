@@ -13,7 +13,7 @@ const Home = () => {
   const { data: session, status: sessionStatus } = useSession();
 
   return (
-    <div className="flex min-h-screen h-screen mt-28 items-center justify-center">
+    <div className="flex min-h-screen h-screen pt-28 pb-10 items-center justify-center">
       {sessionStatus === "loading" ? (
         <ImSpinner className="animate-spin size-20 text-white" />
       ) : sessionStatus !== "authenticated" ? (
