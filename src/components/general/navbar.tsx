@@ -6,6 +6,7 @@ import { useState } from "react";
 
 const Navbar = () => {
   const { data: session } = useSession();
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
@@ -52,7 +53,7 @@ const Navbar = () => {
           </div>
 
           {/* Mobile Menu Button */}
-          <button 
+          <button
             className="lg:hidden text-white"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
@@ -70,7 +71,7 @@ const Navbar = () => {
         `}>
           <div className="p-6">
             <div className="flex justify-end">
-              <button 
+              <button
                 onClick={() => setIsMenuOpen(false)}
                 className="mb-8 text-white"
               >

@@ -8,28 +8,26 @@ import { Badge } from "~/components/ui/badge";
 import Image from "next/image";
 import { alumniNum2ID } from "~/lib/utils";
 
-export default function Alumni() {
+const Alumni = () => {
   const { data: session } = useSession();
+
   const [claimed, setClaimed] = useState(session?.user.passClaimed ?? false);
+
   const alumniID = alumniNum2ID(parseInt(session?.user.id ?? "0", 10));
 
   const day = api.volunteer.getDay.useQuery().data;
 
-  const attended = " text-green-500 bg-white";
-  const notAttended = "text-blue-500 bg-white";
-
-  if (!claimed) {
+  if (!claimed)
     return <SelfPass onClaim={setClaimed} />;
-  }
 
   return (
-    <div className="flex w-full items-center justify-center gap-4 py-28">
+    <div className="flex w-full items-center justify-center gap-4 py-28" >
       <div className="flex flex-wrap justify-center gap-6">
         {session?.user.passClaimed ? (
           <div className="relative">
             <div className="drop-shadow-[0_0_15px_rgba(0,0,0,0.7)]">
               <Image
-                src={day?.day === "DAY2" ? "/pass2.png" : "/pass1.png"}
+                src={day?.day === "DAY1" ? "/pass1.png" : "/pass2.png"}
                 alt="Pass"
                 width={300}
                 height={600}
@@ -46,14 +44,14 @@ export default function Alumni() {
                 <div className="flex gap-2 pt-2">
                   <Badge
                     className={
-                      session?.user.attendedDay1 ? attended : notAttended
+                      session.user.attendedDay1 ? "text-green-500 bg-white" : "text-blue-500 bg-white"
                     }
                   >
                     Day 1
                   </Badge>
                   <Badge
                     className={
-                      session?.user.attendedDay2 ? attended : notAttended
+                      session.user.attendedDay2 ? "text-green-500 bg-white" : "text-blue-500 bg-white"
                     }
                   >
                     Day 2
@@ -67,22 +65,19 @@ export default function Alumni() {
             </div>
           </div>
         ) : (
-          <div className="rounded-lg bg-blue-800 p-6 text-white">
-            You{"'"}ll be able to see your pass once our team has verified your
-            documents! Please check back in 24 hours
+          <div className="rounded-lg flex justify-center items-center flex-col gap-3 text-center bg-blue-800 p-6 text-white">
+            <div>
+              You{"'"}ll be able to see your pass once our team has verified your
+              documents!
+            </div>
+            <div>
+              Please check back in 24 hours
+            </div>
           </div>
         )}
-
-        <div className="fixed bottom-0 flex w-full flex-col items-center justify-center gap-4 rounded-t-xl">
-          <div className="flex w-full flex-col items-center justify-center gap-4 rounded-t-2xl bg-blue-800 p-4 md:flex-row">
-            <p className="text-center text-sm text-white">
-              If you have any issues with payments or anything, WhatsApp
-              +91 96863 56123, +91 94488 46524
-              {/* TODO: Add the correct number */}
-            </p>
-          </div>
-        </div>
       </div>
-    </div>
+    </div >
   );
 }
+
+export default Alumni;

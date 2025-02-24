@@ -24,7 +24,7 @@ const RoleManagement = () => {
   const { data, fetchNextPage, isFetchingPreviousPage, isFetchingNextPage } =
     api.admin.getAllUsers.useInfiniteQuery(
       { take: 20 },
-      { 
+      {
         getNextPageParam: (lastPage: UserResponse) => lastPage.nextCursor,
       },
     );
@@ -68,9 +68,8 @@ const RoleManagement = () => {
   }));
 
   return (
-    <div className="container mx-auto py-10">
-      <div className=" rounded-lg shadow p-4">
-        <h2 className="text-3xl text-center font-bold mb-4 text-white">User Role Management</h2>
+    <div className="container mx-auto">
+      <div className="rounded-lg shadow p-4">
         <DataTable
           columns={RoleColumns}
           data={tableData}

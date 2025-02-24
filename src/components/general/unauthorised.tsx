@@ -12,8 +12,9 @@ import {
 } from "~/components/ui/card";
 import { LuLogOut } from "react-icons/lu";
 
-export default function Unauthorised() {
+const Unauthorised = () => {
   const { data: session } = useSession();
+
   return (
     <Card className="mx-4 bg-blue-700/10 backdrop-blur-md shadow-2xl shadow-black/20 text-white">
       <CardHeader>
@@ -26,8 +27,21 @@ export default function Unauthorised() {
           register from <a href="incridea.in">incridea.in</a>
         </div>
         <div>
-          {/* TODO: Add details */}
           If you think this is an error, contact the developers
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-4">
+          <span>
+            Satwik Prabhu
+          </span>
+          <a href="tel:9513295282" className="col-span-1 md:col-span-3 hover:underline hover:text-blue-500">
+            +919513295282
+          </a>
+          <span>
+            Omkar Prabhu
+          </span>
+          <a href="tel:9448846524" className="col-span-1 md:col-span-3 hover:underline hover:text-blue-500">
+            +919448846524
+          </a>
         </div>
         <div>
           You are currently signed in as{" "}
@@ -38,9 +52,9 @@ export default function Unauthorised() {
       </CardContent>
       <CardFooter>
         <Button
-          onClick={async () => {
-            await signOut();
-          }}
+          onClick={async () =>
+            await signOut()
+          }
           className="bg-white text-black hover:scale-105 hover:bg-white hover:text-palate_2"
         >
           <LuLogOut className="mr-2 size-5" />
@@ -50,3 +64,5 @@ export default function Unauthorised() {
     </Card>
   );
 }
+
+export default Unauthorised;

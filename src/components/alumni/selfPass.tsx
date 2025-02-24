@@ -16,7 +16,7 @@ interface SelfPassProps {
   onClaim: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function SelfPass({ onClaim }: SelfPassProps) {
+const SelfPass = ({ onClaim }: SelfPassProps) => {
   const [details, setDetails] = useState<{
     phoneNumber: string;
     idProof: string;
@@ -200,3 +200,5 @@ export default function SelfPass({ onClaim }: SelfPassProps) {
     </>
   );
 }
+
+export default SelfPass;

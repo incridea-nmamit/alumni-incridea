@@ -24,11 +24,12 @@ export const RoleColumns: ColumnDef<RoleUser>[] = [
   },
   {
     id: "actions",
+    header: "Update Role",
     cell: ({ row }) => {
       const user = row.original;
       return (
         <select
-          className="rounded-md bg-blue-900 text-white border-blue-700 shadow-sm focus:border-blue-600 focus:ring-blue-600"
+          className="rounded-md p-3 border-white bg-blue-800 text-white shadow-sm focus:border-blue-600 focus:ring-blue-600"
           value={user.role}
           onChange={(e) => user.onRoleChange(user.id, e.target.value as Role)}
         >

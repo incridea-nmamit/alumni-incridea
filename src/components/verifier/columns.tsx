@@ -27,7 +27,7 @@ export interface User {
 
 const VerificationCell = ({ row }: { row: { original: User } }) => {
   const [isFullScreen, setIsFullScreen] = useState(false);
-  const utils = api.useContext();
+  const utils = api.useUtils();
   const { mutate: updateVerification } = api.verifier.updateVerification.useMutation({
     onSuccess: () => {
       void utils.verifier.getAllUsers.invalidate();
@@ -60,7 +60,7 @@ const VerificationCell = ({ row }: { row: { original: User } }) => {
             Approve pass claim for {row.original.email} ?
           </DialogDescription>
         </DialogHeader>
-        
+
         {row.original.idProof && (
           <>
             <div className="relative w-full h-[500px] my-4">

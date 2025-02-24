@@ -6,12 +6,11 @@ import PaginationControls from "~/components/utils/pagination/controls";
 import { VerifierColumns } from "./columns";
 import { api } from "~/trpc/react";
 
-
-const VERIFIER = () => {
+const Verifier = () => {
   const { data, fetchNextPage, isFetchingPreviousPage, isFetchingNextPage } =
     api.verifier.getAllUsersFiltered.useInfiniteQuery(
       { take: 50 },
-      { 
+      {
         getNextPageParam: (lastPage) => lastPage.nextCursor,
       },
     );
@@ -54,4 +53,4 @@ const VERIFIER = () => {
   );
 };
 
-export default VERIFIER;
+export default Verifier;
