@@ -3,7 +3,7 @@ import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { z } from "zod";
 
 export const verifierRouter = createTRPCRouter({
-  
+
   getAllUsers: protectedProcedure
     .input(
       z.object({
@@ -91,7 +91,7 @@ export const verifierRouter = createTRPCRouter({
       return updatedUser;
     }),
 
-  getAllUsersFiltered: protectedProcedure
+  getAllPaidUsers: protectedProcedure
     .input(
       z.object({
         cursor: z.number().nullish(),
@@ -104,8 +104,10 @@ export const verifierRouter = createTRPCRouter({
           id: "asc",
         },
         where: {
-          paymentOrderId: {
-            not: null,
+          PaymentOrder: {
+            some: {
+              status: "SUCCESS",
+            }
           }
         },
         select: {

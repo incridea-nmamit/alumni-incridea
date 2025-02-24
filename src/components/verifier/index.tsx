@@ -8,7 +8,7 @@ import { api } from "~/trpc/react";
 
 const Verifier = () => {
   const { data, fetchNextPage, isFetchingPreviousPage, isFetchingNextPage } =
-    api.verifier.getAllUsersFiltered.useInfiniteQuery(
+    api.verifier.getAllPaidUsers.useInfiniteQuery(
       { take: 50 },
       {
         getNextPageParam: (lastPage) => lastPage.nextCursor,

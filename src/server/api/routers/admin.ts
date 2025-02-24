@@ -32,7 +32,7 @@ export const adminRouter = createTRPCRouter({
       };
     }),
 
-    getAllUsersFiltered: adminProcedure
+  getAllPaidUsers: adminProcedure
     .input(
       z.object({
         cursor: z.number().nullish(),
@@ -45,11 +45,10 @@ export const adminRouter = createTRPCRouter({
           id: "asc",
         },
         where: {
-          paymentOrderId: {
-            not: null,
-          },
           PaymentOrder: {
-            status: "SUCCESS",
+            some: {
+              status: "SUCCESS",
+            }
           },
         },
         take: input.take + 1,
@@ -68,6 +67,7 @@ export const adminRouter = createTRPCRouter({
         nextCursor,
       };
     }),
+
   toggleAlumniPass: adminProcedure
     .input(
       z.object({

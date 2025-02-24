@@ -10,7 +10,7 @@ import { api } from "~/trpc/react";
 
 const AlumniTable: FunctionComponent = () => {
   const { data, fetchNextPage, isFetchingPreviousPage, isFetchingNextPage } =
-    api.admin.getAllUsersFiltered.useInfiniteQuery(
+    api.admin.getAllPaidUsers.useInfiniteQuery(
       { take: 50 },
       { getNextPageParam: (lastPage) => lastPage.nextCursor },
     );

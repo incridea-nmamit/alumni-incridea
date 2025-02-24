@@ -39,23 +39,24 @@ model Session {
 }
 
 model User {
-    id               Int           @id @default(autoincrement())
+    id Int @id @default(autoincrement())
+
     name             String?
-    email            String        @unique
+    email            String    @unique
     phoneNumber      String?
     emailVerified    DateTime?
     image            String?
     idProof          String?
     usn              String?
     yearofGraduation Int?
-    userVerfied      Boolean       @default(false)
-    role             Role          @default(USER)
-    passClaimed      Boolean       @default(false)
-    attendedDay1     Boolean       @default(false)
-    attendedDay2     Boolean       @default(false)
-    captureUpdated   Boolean       @default(false)
-    PaymentOrder     PaymentOrder? @relation(fields: [paymentOrderId], references: [id])
-    paymentOrderId   String?
+    userVerfied      Boolean   @default(false)
+    role             Role      @default(USER)
+    passClaimed      Boolean   @default(false)
+    attendedDay1     Boolean   @default(false)
+    attendedDay2     Boolean   @default(false)
+    captureUpdated   Boolean   @default(false)
+
+    PaymentOrder PaymentOrder[]
 
     accounts Account[]
     sessions Session[]
@@ -65,7 +66,8 @@ model User {
 }
 
 model PaymentOrder {
-    id           String  @id @default(cuid())
+    id String @id @default(cuid())
+
     rzpOrderID   String  @unique
     rzpPaymentID String? @unique
     status       Status  @default(PENDING)
@@ -73,9 +75,13 @@ model PaymentOrder {
 
     paymentData Json?
 
+    userId Int
+    User   User @relation(fields: [userId], references: [id])
+
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
-    User      User[]
+
+    @@index([userId])
 }
 
 model VerificationToken {
