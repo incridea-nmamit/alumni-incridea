@@ -118,8 +118,8 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div>
-      <div className="flex items-center justify-between gap-3 py-4">
+    <div className="flex h-full flex-col justify-between">
+      <div className="flex justify-between gap-3 py-4">
         {headerChild && (
           <div>
             <div
@@ -202,9 +202,9 @@ export function DataTable<TData, TValue>({
         </div>
       </div>
 
-      <div className="mx-auto rounded-md border bg-blue-900 text-white shadow-md">
+      <div className="relative flex-1 overflow-auto rounded-md border bg-blue-900 text-white shadow-md">
         <Table>
-          <TableHeader>
+          <TableHeader className="sticky top-0 bg-blue-900">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {

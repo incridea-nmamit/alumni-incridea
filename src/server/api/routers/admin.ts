@@ -84,7 +84,7 @@ export const adminRouter = createTRPCRouter({
           passClaimed: input.state,
         },
       });
-      const response = await fetch(
+      await fetch(
         `${env.CAPTURE_INCRIDEA_URL}/api/verifiedEmail`,
         {
           method: "POST",
@@ -99,17 +99,6 @@ export const adminRouter = createTRPCRouter({
           }),
         },
       );
-
-      if (response.status === 200) {
-        await ctx.db.user.update({
-          where: {
-            email: ctx.session.user.email,
-          },
-          data: {
-            captureUpdated: true,
-          },
-        });
-      }
     }),
 
   updateUserRole: adminProcedure

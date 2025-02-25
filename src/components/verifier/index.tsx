@@ -9,7 +9,7 @@ import { api } from "~/trpc/react";
 const Verifier = () => {
   const { data, fetchNextPage, isFetchingPreviousPage, isFetchingNextPage } =
     api.verifier.getAllPaidUsers.useInfiniteQuery(
-      { take: 50 },
+      { take: 100 },
       {
         getNextPageParam: (lastPage) => lastPage.nextCursor,
       },
@@ -30,25 +30,27 @@ const Verifier = () => {
   const nextCursor = data?.pages[pageNo]?.nextCursor;
 
   return (
-    <div className="container mx-auto py-10 mt-36">
-      <DataTable
-        columns={VerifierColumns}
-        data={currPage}
-        filterColumnId="email"
-        filterPlaceHolder="Search by email"
-        manualPagination
-        paginationChild={
-          <PaginationControls
-            currPageNo={pageNo}
-            handleFetchPreviousPage={handleFetchPreviousPage}
-            handleFetchNextPage={handleFetchNextPage}
-            disableNextButton={!nextCursor}
-            disablePreviousButton={pageNo <= 0}
-            isFetchingPreviousPage={isFetchingPreviousPage}
-            isFetchingNextPage={isFetchingNextPage}
-          />
-        }
-      />
+    <div className="mt-20 flex h-[calc(100vh-16rem)] flex-col">
+      <div className="container mx-auto flex h-full flex-col px-4">
+        <DataTable
+          columns={VerifierColumns}
+          data={currPage}
+          filterColumnId="email"
+          filterPlaceHolder="Search by email"
+          manualPagination
+          paginationChild={
+            <PaginationControls
+              currPageNo={pageNo}
+              handleFetchPreviousPage={handleFetchPreviousPage}
+              handleFetchNextPage={handleFetchNextPage}
+              disableNextButton={!nextCursor}
+              disablePreviousButton={pageNo <= 0}
+              isFetchingPreviousPage={isFetchingPreviousPage}
+              isFetchingNextPage={isFetchingNextPage}
+            />
+          }
+        />
+      </div>
     </div>
   );
 };

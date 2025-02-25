@@ -59,7 +59,7 @@ export const verifierRouter = createTRPCRouter({
       });
 
       if (updatedUser.email && updatedUser.name) {
-        const response = await fetch(
+       await fetch(
           `${env.CAPTURE_INCRIDEA_URL}/api/verifiedEmail`,
           {
             method: "POST",
@@ -75,17 +75,6 @@ export const verifierRouter = createTRPCRouter({
             }),
           },
         );
-
-        if (response.status === 200) {
-          await ctx.db.user.update({
-            where: {
-              id: input.userId,
-            },
-            data: {
-              captureUpdated: true,
-            },
-          });
-        }
       }
 
       return updatedUser;

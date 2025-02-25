@@ -54,7 +54,6 @@ model User {
     passClaimed      Boolean   @default(false)
     attendedDay1     Boolean   @default(false)
     attendedDay2     Boolean   @default(false)
-    captureUpdated   Boolean   @default(false)
 
     PaymentOrder PaymentOrder[]
 
@@ -95,6 +94,14 @@ model VerificationToken {
 model ClientSettings {
     id  Int @id @default(autoincrement())
     day Day @default(DAY1)
+}
+
+model AuditLog {
+  id              Int      @id @default(autoincrement())
+  sessionUserName String   // User performing action
+  audit_type      String   // Type of audit entry
+  dateTime        DateTime @default(now())
+  description     String   // Audit details
 }
 
 enum Role {
