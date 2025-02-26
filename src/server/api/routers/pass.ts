@@ -50,17 +50,6 @@ export const passRouter = createTRPCRouter({
         payment_capture: true,
       });
 
-     if (razorpayOrder.id) {
-      await ctx.db.user.update({
-        where: {
-          id: user.id,
-        },
-        data: {
-          passClaimed: true,
-        },
-      });
-    }
-
       // Verify order creation was successful
       if (!razorpayOrder.id) {
         throw new TRPCError({

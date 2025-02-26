@@ -1,7 +1,5 @@
 import { z } from "zod";
-import { adminProcedure, createTRPCRouter } from "../trpc";
-import { env } from "~/env";
-
+import { adminProcedure, createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const adminRouter = createTRPCRouter({
   getAllUsers: adminProcedure
@@ -67,44 +65,25 @@ export const adminRouter = createTRPCRouter({
         nextCursor,
       };
     }),
-
-  toggleAlumniPass: adminProcedure
-    .input(
-      z.object({
-        id: z.number(),
-        state: z.boolean(),
-      }),
-    )
-    .mutation(async ({ input, ctx }) => {
-      const user = await ctx.db.user.update({
+    getAllVerifiedUsers: protectedProcedure
+    .query(async ({ ctx }) => {
+      const users = await ctx.db.user.findMany({
         where: {
-          id: input.id,
-        },
-        data: {
-          passClaimed: input.state,
+          PaymentOrder: {
+            some: {
+              status: "SUCCESS",
+            }
+          },
+          role: "ALUMNI"
         },
       });
-      await fetch(
-        `${env.CAPTURE_INCRIDEA_URL}/api/verifiedEmail`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${env.CAPTURE_INCRIDEA_SECRET}`,
-          },
-          body: JSON.stringify({
-            email: user.email,
-            name: user.name,
-            phoneNumber: user.phoneNumber,
-            specialType: "alumni",
-          }),
-        },
-      );
+      return users;
     }),
 
   updateUserRole: adminProcedure
     .input(z.object({
       userId: z.number(),
-      newRole: z.enum(['ADMIN', 'USER', 'VOLUNTEER', 'VERIFIER']),
+      newRole: z.enum(['ADMIN', 'USER', 'VOLUNTEER', 'VERIFIER', 'ALUMNI', 'UNVERIFIED', 'PRONITECOM', 'SCAMMER']),
     }))
     .mutation(async ({ ctx, input }) => {
       const currentUser = await ctx.db.user.findFirst({

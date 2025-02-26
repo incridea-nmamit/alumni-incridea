@@ -4,6 +4,7 @@ import { api } from "~/trpc/react";
 import { DataTable } from "~/components/ui/data-table";
 import PaginationControls from "~/components/utils/pagination/controls";
 import { RoleColumns } from "./roleColumns";
+import { useSession } from "next-auth/react";
 
 type UserResponse = {
   users: {
@@ -28,11 +29,17 @@ const RoleManagement = () => {
         getNextPageParam: (lastPage: UserResponse) => lastPage.nextCursor,
       },
     );
-
+  const {data: session} = useSession();
+  const auditLogMutation = api.audit.log.useMutation();
   const updateRole = api.admin.updateUserRole.useMutation({
-    onSuccess: () => {
+    onSuccess: async (data, variables) => {
       setShowConfirmation(false);
-    },
+      await auditLogMutation.mutateAsync({
+        sessionUser: session?.user.email ?? "unknown",
+        description: `Changed role for user with ID ${variables.userId} to ${variables.newRole} by ${session?.user.email ?? "unknown"}`,
+        audit: 'RoleChangeAudit'
+      });
+    }
   });
 
   const handleRoleChange = (userId: number, role: Role) => {

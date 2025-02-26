@@ -17,6 +17,33 @@ export const volunteerRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
+      const user = await ctx.db.user.findFirst({
+        where: {
+          id: alumniID2Num(input.passId),
+        },
+      });
+      if (!user) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "User not found",
+        });
+      }
+
+      if (user.role === "SCAMMER") {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "User verification failed",
+        });
+      }
+
+      if (user.role === "UNVERIFIED") {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "User yet to be verified",
+        });
+      }
+
+      if (user.role !== "ALUMNI") {
       if (input.day === "DAY1") {
         await ctx.db.user.update({
           where: {
@@ -41,7 +68,8 @@ export const volunteerRouter = createTRPCRouter({
           message: "Invalid day",
         });
       }
-    }),
+    }
+  }),
 
   getDay: protectedProcedure.query(async ({ ctx }) => {
     return await ctx.db.clientSettings.findFirst();

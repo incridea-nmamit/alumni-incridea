@@ -49,9 +49,7 @@ model User {
     idProof          String?
     usn              String?
     yearofGraduation Int?
-    userVerfied      Boolean   @default(false)
     role             Role      @default(USER)
-    passClaimed      Boolean   @default(false)
     attendedDay1     Boolean   @default(false)
     attendedDay2     Boolean   @default(false)
 
@@ -107,8 +105,12 @@ model AuditLog {
 enum Role {
     ADMIN
     USER
+    PRONITECOM
+    ALUMNI
+    UNVERIFIED
     VOLUNTEER
     VERIFIER
+    SCAMMER
 }
 
 enum Day {

@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4F46E5;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2563EB;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <circle cx="256" cy="256" r="220" fill="#EFF6FF" />
+  <circle cx="256" cy="256" r="180" fill="#DBEAFE" />
+  <g transform="translate(140, 140) scale(0.45)">
+    <rect x="128" y="60" width="256" height="360" rx="30" ry="30" fill="white" stroke="#94A3B8" stroke-width="12" />
+    <rect x="168" y="120" width="176" height="30" rx="6" ry="6" fill="#E2E8F0" />
+    <rect x="168" y="170" width="176" height="30" rx="6" ry="6" fill="#E2E8F0" />
+    <rect x="168" y="220" width="176" height="30" rx="6" ry="6" fill="#E2E8F0" />
+    <rect x="168" y="270" width="120" height="30" rx="6" ry="6" fill="#E2E8F0" />
+  </g>
+  <circle cx="350" cy="180" r="50" fill="url(#gradient)" />
+  <path d="M335,180 L345,190 L365,170" stroke="white" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+  <g opacity="0.8">
+    <circle cx="350" cy="180" r="70" stroke="#4F46E5" stroke-width="8" fill="none" stroke-dasharray="15,10" transform="rotate(45 350 180)">
+      <animateTransform 
+        attributeName="transform" 
+        type="rotate" 
+        from="0 350 180" 
+        to="360 350 180" 
+        dur="5s" 
+        repeatCount="indefinite" />
+    </circle>
+  </g>
+</svg>

@@ -54,14 +54,4 @@ export const AlumniColumns: ColumnDef<User>[] = [
     accessorKey: "phoneNumber",
     header: "Ph No.",
   },
-  {
-    id: "passClaimed",
-    accessorKey: "passClaimed",
-    header: "Pass Claimed",
-  },
-  {
-    id: "userVerfied",
-    accessorKey: "userVerfied",
-    header: "User Verified",
-  },
 ];

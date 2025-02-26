@@ -11,6 +11,7 @@ import { Input } from "~/components/ui/input";
 import { env } from "~/env";
 import { CldImage, CldUploadButton } from "next-cloudinary";
 import Script from "next/script";
+import { useSession } from "next-auth/react";
 
 interface SelfPassProps {
   onClaim: React.Dispatch<React.SetStateAction<boolean>>;
@@ -45,7 +46,8 @@ const SelfPass = ({ onClaim }: SelfPassProps) => {
   });
 
   const changePaymentStatus = api.pass.changePaymentStatus.useMutation();
-
+  const setRole = api.admin.updateUserRole.useMutation();
+  const {data: session} = useSession();
   const claimPass = async () => {
     if (!validatePhoneNumber(details.phoneNumber)) {
       setError("Please enter a valid 10-digit phone number");
@@ -84,6 +86,12 @@ const SelfPass = ({ onClaim }: SelfPassProps) => {
               status: "SUCCESS",
               response: response,
             });
+            if (session?.user?.id) {
+              await setRole.mutateAsync({
+                userId: session.user.id,
+                newRole: "UNVERIFIED",
+              });
+            }
           }
         } catch (error) {
           console.log(error);

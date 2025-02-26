@@ -21,8 +21,6 @@ export const verifierRouter = createTRPCRouter({
           email: true,
           name: true,
           usn: true,
-          userVerfied: true,
-          passClaimed: true,
           idProof: true,
         },
       });
@@ -40,16 +38,14 @@ export const verifierRouter = createTRPCRouter({
     .input(
       z.object({
         userId: z.number(),
-        passClaimed: z.boolean(),
-        userVerfied: z.boolean(),
+        response:z.enum(["APPROVED", "REJECTED"]),
       }),
     )
     .mutation(async ({ ctx, input }) => {
       const updatedUser = await ctx.db.user.update({
         where: { id: input.userId },
         data: {
-          passClaimed: input.passClaimed,
-          userVerfied: input.userVerfied,
+          role: input.response === "APPROVED" ? "ALUMNI" : "SCAMMER",
         },
         select: {
           email: true,
@@ -58,7 +54,7 @@ export const verifierRouter = createTRPCRouter({
         }
       });
 
-      if (updatedUser.email && updatedUser.name) {
+      if (input.response === "APPROVED" && updatedUser.email && updatedUser.name) {
        await fetch(
           `${env.CAPTURE_INCRIDEA_URL}/api/verifiedEmail`,
           {
@@ -104,8 +100,6 @@ export const verifierRouter = createTRPCRouter({
           email: true,
           name: true,
           usn: true,
-          userVerfied: true,
-          passClaimed: true,
           idProof: true,
         },
         take: input.take + 1,

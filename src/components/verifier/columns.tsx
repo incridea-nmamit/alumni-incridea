@@ -14,14 +14,15 @@ import { api } from "~/trpc/react";
 import { toast } from "sonner";
 import Image from "next/image";
 import { useState } from "react";
+import { useSession } from "next-auth/react";
 
 export interface User {
   id: number;
   email: string;
   name: string | null;
   usn: string | null;
-  userVerfied: boolean;
-  passClaimed: boolean;
+
+
   idProof: string | null;
 }
 
@@ -37,12 +38,17 @@ const VerificationCell = ({ row }: { row: { original: User } }) => {
       toast.error(error.message);
     },
   });
-
-  const handleVerification = (approve: boolean) => {
+  const {data :session} = useSession()
+  const auditLogMutation = api.audit.log.useMutation();
+  const handleVerification = async (status: boolean) => {
     updateVerification({
       userId: row.original.id,
-      passClaimed: approve,
-      userVerfied: true,
+      response: status ? "APPROVED" : "REJECTED",
+    });
+    await auditLogMutation.mutateAsync({
+      sessionUser: session?.user.email ?? "unknown",
+      description: `${status ? "Approved" : "Rejected"} verification for user ${row.original.email} by ${session?.user.email}`,
+      audit: 'VerificationAudit'
     });
   };
 

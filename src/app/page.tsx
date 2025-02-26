@@ -8,6 +8,9 @@ import Admin from "~/components/admin";
 import Alumni from "~/components/alumni";
 import PleaseLogin from "~/components/general/pleaseLogin";
 import Unauthorised from "~/components/general/unauthorised";
+import Unverified from "~/components/unverified";
+import ProCom from "~/components/pronitecom";
+import NotVerifiedPage from "~/pages/not-verified";
 
 const Home = () => {
   const { data: session, status: sessionStatus } = useSession();
@@ -24,6 +27,14 @@ const Home = () => {
         <Volunteer />
       ) : session.user.role === "VERIFIER" ? (
         <Verifier />
+      ) : session.user.role === "UNVERIFIED" ? (
+        <Unverified />
+      ) : session.user.role === "ALUMNI" ? (
+        <Alumni />
+      ) : session.user.role === "PRONITECOM" ? (
+        <ProCom />
+      ): session.user.role === "SCAMMER" ? (
+        <NotVerifiedPage />
       ) : session.user.email.endsWith("@nitte.edu.in") ||
         session.user.email.endsWith("@nmamit.in") ? (
         <Unauthorised />
