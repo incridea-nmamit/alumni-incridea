@@ -43,7 +43,7 @@ export const volunteerRouter = createTRPCRouter({
         });
       }
 
-      if (user.role !== "ALUMNI") {
+      if (user.role == "ALUMNI") {
       if (input.day === "DAY1") {
         await ctx.db.user.update({
           where: {
