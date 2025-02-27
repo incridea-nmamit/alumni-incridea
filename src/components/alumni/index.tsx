@@ -11,7 +11,7 @@ import { alumniNum2ID } from "~/lib/utils";
 const Alumni = () => {
   const { data: session } = useSession();
 
-  const [claimed, setClaimed] = useState(session?.user.passClaimed ?? false);
+  const [claimed, setClaimed] = useState(session?.user.role === 'ALUMNI');
 
   const alumniID = alumniNum2ID(parseInt(session?.user.id ?? "0", 10));
 
@@ -23,7 +23,7 @@ const Alumni = () => {
   return (
     <div className="flex w-full items-center justify-center gap-4 py-28" >
       <div className="flex flex-wrap justify-center gap-6">
-        {session?.user.passClaimed ? (
+        {session?.user.role==="ALUMNI" ? (
           <div className="relative">
             <div className="drop-shadow-[0_0_15px_rgba(0,0,0,0.7)]">
               <Image
