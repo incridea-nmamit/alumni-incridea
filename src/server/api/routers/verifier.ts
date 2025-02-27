@@ -118,4 +118,48 @@ export const verifierRouter = createTRPCRouter({
         nextCursor,
       };
     }),
+
+    getAllPaidUnVerifiedUsers: protectedProcedure
+    .input(
+      z.object({
+        cursor: z.number().nullish(),
+        take: z.number(),
+      }),
+    )
+    .query(async ({ input, ctx }) => {
+      const users = await ctx.db.user.findMany({
+        orderBy: {
+          id: "asc",
+        },
+        where: {
+          PaymentOrder: {
+            some: {
+              status: "SUCCESS",
+            }
+          },
+          role: "UNVERIFIED"
+        },
+        select: {
+          id: true,
+          email: true,
+          name: true,
+          usn: true,
+          idProof: true,
+        },
+        take: input.take + 1,
+        cursor: input.cursor ? { id: input.cursor } : undefined,
+      });
+
+      let nextCursor: number | undefined = undefined;
+
+      if (users.length > input.take) {
+        const nextUser = users.pop();
+        nextCursor = nextUser?.id;
+      }
+
+      return {
+        users,
+        nextCursor,
+      };
+    }),
 });

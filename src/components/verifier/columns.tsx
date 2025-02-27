@@ -31,7 +31,7 @@ const VerificationCell = ({ row }: { row: { original: User } }) => {
   const utils = api.useUtils();
   const { mutate: updateVerification } = api.verifier.updateVerification.useMutation({
     onSuccess: () => {
-      void utils.verifier.getAllUsers.invalidate();
+      void utils.verifier.getAllPaidUnVerifiedUsers.invalidate();
       toast.success("User verification updated successfully");
     },
     onError: (error) => {
