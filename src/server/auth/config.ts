@@ -64,7 +64,6 @@ export const authConfig = {
           id: user.id,
           email: user.email,
           role: dbUser?.role ?? "USER",
-          passClaimed: dbUser?.passClaimed ?? false,
           attendedDay1: dbUser?.attendedDay1 ?? false,
           attendedDay2: dbUser?.attendedDay2 ?? false,
         },
