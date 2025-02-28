@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+"use client";
 import React, { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
@@ -11,13 +12,9 @@ import { Input } from "~/components/ui/input";
 import { env } from "~/env";
 import { CldImage, CldUploadButton } from "next-cloudinary";
 import Script from "next/script";
-import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
-interface SelfPassProps {
-  onClaim: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-const SelfPass = ({ onClaim }: SelfPassProps) => {
+const SelfPass = () => {
   const [details, setDetails] = useState<{
     phoneNumber: string;
     idProof: string;
@@ -29,6 +26,7 @@ const SelfPass = ({ onClaim }: SelfPassProps) => {
     usn: "",
     yearOfGraduation: 2024,
   });
+  const router = useRouter();
 
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -36,18 +34,14 @@ const SelfPass = ({ onClaim }: SelfPassProps) => {
   const claimSelfpass = api.pass.claimPass.useMutation({
     onSuccess: () => {
       setIsSubmitting(false);
-      onClaim(true);
     },
     onError: () => {
       setIsSubmitting(false);
       toast.error("Oops! Something went wrong");
-      onClaim(false);
     },
   });
 
   const changePaymentStatus = api.pass.changePaymentStatus.useMutation();
-  const setRole = api.admin.updateUserRole.useMutation();
-  const {data: session} = useSession();
   const claimPass = async () => {
     if (!validatePhoneNumber(details.phoneNumber)) {
       setError("Please enter a valid 10-digit phone number");
@@ -86,11 +80,8 @@ const SelfPass = ({ onClaim }: SelfPassProps) => {
               status: "SUCCESS",
               response: response,
             });
-            if (session?.user?.id) {
-              await setRole.mutateAsync({
-                userId: session.user.id,
-                newRole: "UNVERIFIED",
-              });
+            if (window) {
+              window.location.href = "/";
             }
           }
         } catch (error) {
@@ -110,7 +101,7 @@ const SelfPass = ({ onClaim }: SelfPassProps) => {
     <>
       <Script src="https://checkout.razorpay.com/v1/checkout.js" />
       <div className="flex items-center justify-center py-24">
-        <Card className="mx-4 w-full max-w-md border border-none bg-blue-700/10 backdrop-blur-md shadow-2xl shadow-black/20 text-white">
+        <Card className="mx-4 w-full max-w-md border border-none bg-blue-700/10 text-white shadow-2xl shadow-black/20 backdrop-blur-md">
           <CardHeader>
             <CardTitle className="text-center text-2xl">
               Claim Your Pass
@@ -207,6 +198,6 @@ const SelfPass = ({ onClaim }: SelfPassProps) => {
       </div>
     </>
   );
-}
+};
 
 export default SelfPass;

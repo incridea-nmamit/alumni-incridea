@@ -11,6 +11,7 @@ import Unauthorised from "~/components/general/unauthorised";
 import Unverified from "~/components/unverified";
 import ProCom from "~/components/pronitecom";
 import NotVerifiedPage from "~/pages/not-verified";
+import SelfPass from "~/components/alumni/selfPass";
 
 const Home = () => {
   const { data: session, status: sessionStatus } = useSession();
@@ -39,7 +40,7 @@ const Home = () => {
         session.user.email.endsWith("@nmamit.in") ? (
         <Unauthorised />
       ) : (
-        <Alumni />
+        <SelfPass />
       )}
     </div>
   );

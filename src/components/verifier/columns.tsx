@@ -22,23 +22,23 @@ export interface User {
   name: string | null;
   usn: string | null;
 
-
   idProof: string | null;
 }
 
 const VerificationCell = ({ row }: { row: { original: User } }) => {
   const [isFullScreen, setIsFullScreen] = useState(false);
   const utils = api.useUtils();
-  const { mutate: updateVerification } = api.verifier.updateVerification.useMutation({
-    onSuccess: () => {
-      void utils.verifier.getAllPaidUnVerifiedUsers.invalidate();
-      toast.success("User verification updated successfully");
-    },
-    onError: (error) => {
-      toast.error(error.message);
-    },
-  });
-  const {data :session} = useSession()
+  const { mutate: updateVerification } =
+    api.verifier.updateVerification.useMutation({
+      onSuccess: () => {
+        void utils.verifier.getAllPaidUnVerifiedUsers.invalidate();
+        toast.success("User verification updated successfully");
+      },
+      onError: (error) => {
+        toast.error(error.message);
+      },
+    });
+  const { data: session } = useSession();
   const auditLogMutation = api.audit.log.useMutation();
   const handleVerification = async (status: boolean) => {
     updateVerification({
@@ -48,7 +48,7 @@ const VerificationCell = ({ row }: { row: { original: User } }) => {
     await auditLogMutation.mutateAsync({
       sessionUser: session?.user.email ?? "unknown",
       description: `${status ? "Approved" : "Rejected"} verification for user ${row.original.email} by ${session?.user.email}`,
-      audit: 'VerificationAudit'
+      audit: "VerificationAudit",
     });
   };
 
@@ -69,9 +69,9 @@ const VerificationCell = ({ row }: { row: { original: User } }) => {
 
         {row.original.idProof && (
           <>
-            <div className="relative w-full h-[500px] my-4">
+            <div className="relative my-4 h-[500px] w-full">
               <Image
-                src={`${row.original.idProof.replace('/upload/', '/upload/f_jpg/')}`}
+                src={`${row.original.idProof.replace("/upload/", "/upload/f_jpg/")}`}
                 alt="ID Proof"
                 fill
                 className="object-contain"
@@ -80,7 +80,7 @@ const VerificationCell = ({ row }: { row: { original: User } }) => {
               <Button
                 variant="outline"
                 size="icon"
-                className="absolute top-2 right-2 bg-white/50 hover:bg-white/75"
+                className="absolute right-2 top-2 bg-white/50 hover:bg-white/75"
                 onClick={() => setIsFullScreen(true)}
               >
                 <Maximize2 className="h-4 w-4" />
@@ -88,15 +88,15 @@ const VerificationCell = ({ row }: { row: { original: User } }) => {
             </div>
 
             <Dialog open={isFullScreen} onOpenChange={setIsFullScreen}>
-              <DialogContent className="max-w-[95vw] h-[95vh] p-0">
-                <DialogHeader className="absolute top-2 left-2 z-10">
-                  <DialogTitle className="text-white bg-black/50 px-3 py-1 rounded">
+              <DialogContent className="h-[95vh] max-w-[95vw] p-0">
+                <DialogHeader className="absolute left-2 top-2 z-10">
+                  <DialogTitle className="rounded bg-black/50 px-3 py-1 text-white">
                     ID Proof - Full View
                   </DialogTitle>
                 </DialogHeader>
-                <div className="relative w-full h-full">
+                <div className="relative h-full w-full">
                   <Image
-                    src={`${row.original.idProof.replace('/upload/', '/upload/f_jpg/')}`}
+                    src={`${row.original.idProof.replace("/upload/", "/upload/f_jpg/")}`}
                     alt="ID Proof"
                     fill
                     className="object-contain"
@@ -105,7 +105,7 @@ const VerificationCell = ({ row }: { row: { original: User } }) => {
                   <Button
                     variant="outline"
                     size="icon"
-                    className="absolute top-2 right-2 bg-white/50 hover:bg-white/75"
+                    className="absolute right-2 top-2 bg-white/50 hover:bg-white/75"
                     onClick={() => setIsFullScreen(false)}
                   >
                     <Maximize2 className="h-4 w-4" />
@@ -117,7 +117,10 @@ const VerificationCell = ({ row }: { row: { original: User } }) => {
         )}
 
         <DialogFooter>
-          <Button onClick={() => handleVerification(true)}>
+          <Button
+            onClick={() => handleVerification(true)}
+            className="bg-green-500 text-white hover:bg-green-500 hover:text-white"
+          >
             Approve
           </Button>
           <Button

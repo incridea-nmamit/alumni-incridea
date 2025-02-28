@@ -6,7 +6,7 @@ import { TRPCError } from "@trpc/server";
 import { Status } from "@prisma/client";
 
 // Fixed registration amount for alumni in INR
-const ALUMNI_REGISTRATION_AMOUNT_IN_INR = 256
+const ALUMNI_REGISTRATION_AMOUNT_IN_INR = 256;
 
 export const passRouter = createTRPCRouter({
   // Endpoint: Handles alumni pass registration and payment initiation
@@ -32,6 +32,7 @@ export const passRouter = createTRPCRouter({
           phoneNumber: input.phoneNumber,
           idProof: input.idProof,
           usn: input.usn,
+          yearofGraduation: input.yearOfGraduation,
         },
       });
 
@@ -74,8 +75,6 @@ export const passRouter = createTRPCRouter({
           User: true,
         },
       });
-
-
     }),
 
   // Endpoint: Updates payment status after payment completion/failure
@@ -99,6 +98,11 @@ export const passRouter = createTRPCRouter({
           rzpPaymentID: input.rzpPaymentID ?? undefined,
           status: input.status,
           paymentData: input.response ?? {},
+          User: {
+            update: {
+              role: input.status === "SUCCESS" ? "UNVERIFIED" : "USER",
+            },
+          },
         },
       });
     }),

@@ -1,7 +1,6 @@
 "use client";
 import { useSession } from "next-auth/react";
-import React, { useState } from "react";
-import SelfPass from "./selfPass";
+import React from "react";
 import QRCode from "react-qr-code";
 import { api } from "~/trpc/react";
 import { Badge } from "~/components/ui/badge";
@@ -11,19 +10,14 @@ import { alumniNum2ID } from "~/lib/utils";
 const Alumni = () => {
   const { data: session } = useSession();
 
-  const [claimed, setClaimed] = useState(session?.user.role === 'ALUMNI');
-
   const alumniID = alumniNum2ID(parseInt(session?.user.id ?? "0", 10));
 
   const day = api.volunteer.getDay.useQuery().data;
 
-  if (!claimed)
-    return <SelfPass onClaim={setClaimed} />;
-
   return (
-    <div className="flex w-full items-center justify-center gap-4 py-28" >
+    <div className="flex w-full items-center justify-center gap-4 py-28">
       <div className="flex flex-wrap justify-center gap-6">
-        {session?.user.role==="ALUMNI" ? (
+        {session?.user.role === "ALUMNI" ? (
           <div className="relative">
             <div className="drop-shadow-[0_0_15px_rgba(0,0,0,0.7)]">
               <Image
@@ -44,14 +38,18 @@ const Alumni = () => {
                 <div className="flex gap-2 pt-2">
                   <Badge
                     className={
-                      session.user.attendedDay1 ? "text-green-500 bg-white" : "text-blue-500 bg-white"
+                      session.user.attendedDay1
+                        ? "bg-white text-green-500"
+                        : "bg-white text-blue-500"
                     }
                   >
                     Day 1
                   </Badge>
                   <Badge
                     className={
-                      session.user.attendedDay2 ? "text-green-500 bg-white" : "text-blue-500 bg-white"
+                      session.user.attendedDay2
+                        ? "bg-white text-green-500"
+                        : "bg-white text-blue-500"
                     }
                   >
                     Day 2
@@ -65,19 +63,17 @@ const Alumni = () => {
             </div>
           </div>
         ) : (
-          <div className="rounded-lg flex justify-center items-center flex-col gap-3 text-center bg-blue-800 p-6 text-white">
+          <div className="flex flex-col items-center justify-center gap-3 rounded-lg bg-blue-800 p-6 text-center text-white">
             <div>
-              You{"'"}ll be able to see your pass once our team has verified your
-              documents!
+              You{"'"}ll be able to see your pass once our team has verified
+              your documents!
             </div>
-            <div>
-              Please check back in 24 hours
-            </div>
+            <div>Please check back in 24 hours</div>
           </div>
         )}
       </div>
-    </div >
+    </div>
   );
-}
+};
 
 export default Alumni;
